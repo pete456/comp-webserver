@@ -1,4 +1,4 @@
-module webserver
+module comp-webserver
 
 go 1.15
 

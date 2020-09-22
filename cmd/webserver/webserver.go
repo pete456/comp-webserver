@@ -1,15 +1,16 @@
 package main
 
 import (
-	"webserver/config"
-	"webserver/internal/user"
+	"comp-webserver/config"
+	"comp-webserver/internal/user"
 	"net/http"
 	"log"
 )
 
 func main() {
 	// Web pages
-	http.HandleFunc("/",web.Index)
+	fs := http.FileServer(http.Dir("web/"))
+	http.Handle("/",fs)
 
 	// Post
 	http.HandleFunc("/adduser",user.AddUser)
