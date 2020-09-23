@@ -11,16 +11,16 @@ import (
 
 func main() {
 	sqldb := web.CreateDB()
-	err := web.InsertUser(sqldb,"test","tes pass","title for site")
-	if err != nil {
-		log.Println(err)
-	}
 
 	// Web pages
-	fs := http.FileServer(http.Dir("web/"))
-	http.Handle("/",fs)
+	html := http.FileServer(http.Dir("web/html/"))
+	http.Handle("/",html)
+
+	js := http.FileServer(http.Dir("web/js/"))
+	http.Handle("/js/",http.StripPrefix("/js/",js))
 
 	// Post
 	http.HandleFunc("/adduser",user.AddUser(sqldb))
+
 	log.Fatal(http.ListenAndServe(config.Serverport,nil))
 }

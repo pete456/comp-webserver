@@ -3,6 +3,7 @@ package user
 import (
 	"comp-webserver/config"
 	"comp-webserver/internal/web"
+	"encoding/json"
 	"net/http"
 	"database/sql"
 	"syscall"
@@ -25,17 +26,18 @@ func createunixaccount(user string, pass string) {
 	syscall.ForkExec(config.Adduserscript,args,&syscall.ProcAttr{Dir:""})
 }
 
-
 func AddUser(sql *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if (r.Method == "POST") {
-			log.Printf("post user: %s\n",r.PostFormValue("user"))
-			uname := r.PostFormValue("user")
-			pass := r.PostFormValue("pass")
-			title := r.PostFormValue("title")
-			//u := user{uname,pass,title}
-			web.InsertUser(sql,uname,pass,title)
-			createunixaccount(uname,pass)
+			var user User
+			err := json.NewDecoder(r.Body).Decode(&user)
+			if err != nil {
+				http.Error(w,err.Error(),http.StatusBadRequest)
+			}
+
+			log.Printf("Creating user: %s\n",user.User)
+			web.InsertUser(sql,user.User,user.Pass,user.Title)
+			createunixaccount(user.User,user.Pass)
 		}
 	}
 }
