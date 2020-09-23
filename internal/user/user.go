@@ -22,7 +22,7 @@ func sanatizetitle(title string) string {
 }
 
 func createunixaccount(user string, pass string) {
-	args := []string{config.Adduserscript,config.Usersites,user,pass}
+	args := []string{config.Adduserscript,user,pass,config.Usersites}
 	syscall.ForkExec(config.Adduserscript,args,&syscall.ProcAttr{Dir:""})
 }
 
