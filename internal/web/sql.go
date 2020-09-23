@@ -1,28 +1,34 @@
 package web
 
 import (
+	"comp-webserver/config"
+
+	_ "github.com/lib/pq"
 	"database/sql"
 	"fmt"
 	"log"
 )
 
-func QueryServer(db *sql.DB, ch chan) {
-	select {
-		msg := <-ch
-		row := db.Query(msg)
-		row.Scan()
-	}
+func InsertUser(db *sql.DB, name string, pass string, title string) error {
+	str := `INSERT INTO users(name,pass,title) 
+	VALUES($1,$2,$3);`
+	_, err := db.Exec(str,name,pass,title)
+	return err
 }
 
-func CreateDataBase() chan {
-	sqlchan := make(chan string)
-	connStr := fmt.Sprintf("user=%s dbname=%s",config.SQLUser, config.SQLDatabaseName)
-	db, err := sql.Open("postgres",connStr)
+func CreateDB() *sql.DB {
+	connStr := fmt.Sprintf("user=%s dbname=%s sslmode=disable",config.SQLUser, config.SQLDatabaseName)
 
+	db, err := sql.Open("postgres",connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return sqlchan
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return db
 }
 
