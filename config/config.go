@@ -7,4 +7,4 @@ var Adduserscript string = "/home/sp00k/programming/go/webserver/scripts/adduser
 var SQLDatabaseName string = "CompData"
 var SQLUser string = "dev"
 
-var Usersites string = "~/usersites/"
+var Usersites string = "/webserver/web/usersites/"
