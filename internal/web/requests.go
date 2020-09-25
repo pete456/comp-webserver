@@ -30,10 +30,16 @@ type portaldata struct {
 	Title string `json:title`
 }
 
+type portal struct {
+	PD []portaldata
+}
+
 func GetPortalData(sql *sql.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		data := titlesusersfromdb(sql)
-		err := json.NewEncoder(w).Encode(data)
+		p := portal{data}
+		w.Header().Set("Content-Type","application/json")
+		err := json.NewEncoder(w).Encode(p)
 		if err != nil {
 			log.Fatal(err)
 		}

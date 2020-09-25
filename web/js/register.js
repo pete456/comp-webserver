@@ -14,7 +14,7 @@ function SendCreds() {
 	htmlreq.open("POST","/adduser")
 	htmlreq.onreadystatechange = function() {
 		if(htmlreq.readyState === XMLHttpRequest.DONE){
-			window.location="/login.html"	
+			window.location="/index.html"	
 		}
 	}
 	htmlreq.setRequestHeader("Content-type","application/json")

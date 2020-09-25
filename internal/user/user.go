@@ -12,8 +12,8 @@ type User struct {
 	Title	string
 }
 
-func sanatizetitle(title string) string {
-	return strings.ToLower(title)
+func sanatize(value string) string {
+	return strings.ToLower(value)
 }
 
 func CreateUnixAccount(user string, pass string) {
